@@ -4,18 +4,19 @@ import os
 
 
 api_token = os.environ['PINGDOM_TOKEN']
-api_url   = 'https://api.pingdom.com/api/3.1/checks'
+api_url   = "https://api.pingdom.com/api/3.1/checks"
 
-headers   = {
-            'Content-Type' : 'application/json',
-            'Authorization': 'Bearer {0}'.format(api_token) 
-            }
+authString = "Bearer " + api_token
 
-print(headers)
+authStuff = {
+	"Authorization":authString
+}
+
+print(authStuff)
 
 def call_api():
 
-    response = requests.get(api_url, headers=headers)
+    response = requests.get(api_url, headers=authStuff)
 
     if response.status_code == 404:
         print('[!] [{0}] URL not found: [{1}]'.format(response.status_code,api_url))
@@ -31,6 +32,7 @@ def call_api():
         return None
     elif response.status_code == 200:
         data = json.loads(response.content.decode('utf-8'))
+        print(data)
         return data
     else:
         print('[?] Unexpected Error: [HTTP {0}]: Content: {1}'.format(response.status_code, response.content))
